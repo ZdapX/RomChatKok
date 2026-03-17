@@ -1,13 +1,25 @@
-const { Client, Databases, ID, Query } = require('node-appwrite');
+const mongoose = require('mongoose');
 
-const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1') // Ganti jika pakai self-hosted
-    .setProject('69b8b4bc001561403fe8') // GANTI INI
-    .setKey('standard_52804f783f1e75b9c4646d5c0e8d014ef27fa70c68c22c1419996912d5c29846c86d0b81a9c95048241c5b9d050bb9c7b87a9c412fd6656175d6f1b9d4c4c86281882c905e8a013bf7ceb8169ed4caa3018b4bc953ad085d8905c8b1b61ed3534dee6d2f15971caaa0c47e0b7c36af8dda89f963a666f689989791f1eeeb28f4'); // GANTI INI
+// Ganti <MONGODB_URI> dengan koneksi string dari MongoDB Atlas Anda
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://user:pass@cluster.mongodb.net/chat-db";
 
-const databases = new Databases(client);
+const connectDB = async () => {
+    if (mongoose.connection.readyState >= 1) return;
+    try {
+        await mongoose.connect(MONGODB_URI);
+        console.log("MongoDB Terkoneksi");
+    } catch (err) {
+        console.error("Gagal koneksi MongoDB:", err);
+    }
+};
 
-const DB_ID = '69b8bae400385067563d'; // GANTI INI
-const COLL_ID = 'COLLECTION_ID_ANDA'; // GANTI INI
+// Schema Pesan
+const MessageSchema = new mongoose.Schema({
+    sender: String,
+    text: String,
+    timestamp: { type: Date, default: Date.now }
+});
 
-module.exports = { databases, ID, Query, DB_ID, COLL_ID };
+const Message = mongoose.models.Message || mongoose.model('Message', MessageSchema);
+
+module.exports = { connectDB, Message };
