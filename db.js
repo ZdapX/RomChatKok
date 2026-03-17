@@ -7,7 +7,7 @@ const client = new Client()
 
 const databases = new Databases(client);
 
-const DB_ID = 'DATABASE_ID_ANDA'; // GANTI INI
+const DB_ID = '69b8bae400385067563d'; // GANTI INI
 const COLL_ID = 'COLLECTION_ID_ANDA'; // GANTI INI
 
 module.exports = { databases, ID, Query, DB_ID, COLL_ID };
